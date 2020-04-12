@@ -1,7 +1,9 @@
 import asyncio
 import tailf
 import time
-async def main():
+from datetime import datetime
+
+async def tailer():
     with tailf.Tail("test.txt") as tail:
         while True:
             event = await tail.wait_event()
@@ -19,35 +21,39 @@ async def clock():
     flag=0
     while True:
         if flag == 0:
-            print("tik!")
-            time.sleep(1)
+            print(str(datetime.now().timestamp())[8:13]+" tak!")
+            await asyncio.sleep(1)
             flag = 1
         if flag == 1:
-            print("tok!")
-            time.sleep(1)
+            print(str(datetime.now().timestamp())[8:13]+" tik!")
+            await asyncio.sleep(1)
             flag = 0
 
 async def clocke():
     flag=0
+    await asyncio.sleep(0.5)
     while True:
         if flag == 0:
-            print("tek!")
-            time.sleep(1)
+            print(str(datetime.now().timestamp())[8:13]+" tek!")
+            await asyncio.sleep(1)
             flag = 1
         if flag == 1:
-            print("tik!")
-            time.sleep(1)
+            print(str(datetime.now().timestamp())[8:13]+" tok!")
+            await asyncio.sleep(1)
             flag = 0
 
 #asyncio.run(main())
-async def runner():
-    taskee = asyncio.create_task(main())
+async def main():
+    tasktailer = asyncio.create_task(tailer())
     taskclock = asyncio.create_task(clock())
     taskclocke = asyncio.create_task(clocke())
-    await taskee
+    #await asyncio.gather(taskclock,taskclocke)
+    await tasktailer
     await taskclock
+    #await asyncio.sleep(0.5)
+    #time.sleep(0.5)
     await taskclocke
 
 
 if __name__ == "__main__":
-    asyncio.run(runner())
+    asyncio.run(main())
