@@ -1,0 +1,14 @@
+{
+  "config":{
+  "clientSecret": "abcdef",
+  "clientId": 12345,
+  "token" : "abcdef"
+  },
+  "roomList" : {
+    "0": {
+    "id": "1234",
+      "name": "Foobar",
+      "textChannelID": [1234]
+}
+  }
+}
