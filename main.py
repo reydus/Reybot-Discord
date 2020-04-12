@@ -22,12 +22,19 @@ def loadFunc(response):
         print(bootOrigin.content+"..."+address)
         try:
             with tailf.Tail(address) as tail:
+                first=1
                 while True:
                     event = await tail.wait_event()
                     if isinstance(event, bytes):
                         newText = event.decode("utf-8")
-                        print(newText, end="")
-                        await bootOrigin.channel.send(newText)
+                        if first == 1:  #ignore first event as this will try to print everything on the file.
+                            first = 0
+                        else:
+                            print(newText, end="")
+                            try:
+                                await bootOrigin.channel.send(newText)
+                            except discord.errors.HTTPException:
+                                print("failed to send message")
                     elif event is tailf.Truncated:
                         print("File was truncated")
                     else:
