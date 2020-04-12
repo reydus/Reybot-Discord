@@ -19,6 +19,7 @@ def processInfo(file):
 def loadFunc(response):
     async def tailer(bootOrigin):
         address = bootOrigin.content.split()[1]
+        print(bootOrigin.content+"..."+address)
         try:
             with tailf.Tail(address) as tail:
                 while True:
@@ -32,7 +33,8 @@ def loadFunc(response):
                     else:
                         assert False, "unreachable" # currently. more events may be introduced later
         except:
-            bootOrigin.channel.send("No se encontró el archivo.")
+            await bootOrigin.channel.send("No se encontró el archivo.")
+            await bootOrigin.channel.send(traceback.format_exc())
 
     async def on_ready():
         print('We have logged in as {0.user}'.format(client))
