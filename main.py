@@ -19,6 +19,11 @@ def processInfo(file):
 def loadFunc(response):
     async def tailer(bootOrigin):
         address = bootOrigin.content.split()[1]
+        try:
+            toConsole = bool(bootOrigin.content.split()[2])
+        except:
+            toConsole = False
+
         print(bootOrigin.content+"..."+address)
         try:
             with tailf.Tail(address) as tail:
@@ -30,11 +35,13 @@ def loadFunc(response):
                         if first == 1:  #ignore first event as this will try to print everything on the file.
                             first = 0
                         else:
-                            print(newText, end="")
+                            if toConsole:
+                                print(newText, end="")
                             try:
                                 await bootOrigin.channel.send(newText)
                             except discord.errors.HTTPException:
-                                print("failed to send message")
+                                if toConsole:
+                                    print("failed to send message")
                     elif event is tailf.Truncated:
                         print("File was truncated")
                     else:
